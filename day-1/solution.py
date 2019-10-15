@@ -1,9 +1,20 @@
+#!/usr/bin/env python3
+
 import unittest
 
 def does_adds_up(numbers_list: list, sum: int) -> bool:
     """
     Check whenever any two numbers provided in numbers_list adds up to sum.
     """
+
+    subs = set()
+
+    # O(n)
+    for number in numbers_list:
+        if number in subs: # O(1)
+            return True
+        subs.add(sum - number) # O(1)
+
     return False
 
 
@@ -30,8 +41,6 @@ class TestDoesAddsUp(unittest.TestCase):
         with self.assertRaises(TypeError):
             does_adds_up([-2, -1], "ff")
             does_adds_up(1, 9)
-
-
 
 
 if __name__ == '__main__':
