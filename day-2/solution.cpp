@@ -42,35 +42,52 @@ std::vector<std::uint32_t> solution1(const std::vector<std::uint32_t>& input)
             res[i] *= input[j];
         }
     }
+
     return res;
 }
 
 // time: O(2n)
 // space: O(n)
 // downsides: uses division
-std::vector<std::uint32_t> solution(const std::vector<std::uint32_t>& input)
+std::vector<std::uint32_t> solution2(const std::vector<std::uint32_t>& input)
 {
-    // O(n)
-    auto prod = input.size() > 1 ? 1 : 0;
+    std::uint32_t prod = input.size() > 1 ? 1 : 0;
+
+    // t: O(n)
+    bool zeroFound = false;
     for (std::size_t i = 0; i < input.size(); i++)
     {
         if (input[i] != 0)
         {
             prod *= input[i];
         }
+        else
+        {
+            zeroFound = true;
+        }
     }
 
     auto res = std::vector<std::uint32_t>(input.size());
     for (std::size_t i = 0; i < input.size(); i++)
     {
-        if (input[i] != 0)
+        if (input[i] != 0 && !zeroFound)
         {
             res[i] = prod / input[i];
+        }
+        else if (input[i] != 0 && zeroFound)
+        {
+            res[i] = 0;
+        }
+        else
+        {
+            res[i] = prod;
         }
     }
 
     return res;
 }
+
+auto solution = solution1;
 
 BOOST_AUTO_TEST_CASE( possitive )
 {
@@ -85,7 +102,7 @@ BOOST_AUTO_TEST_CASE( possitive )
     BOOST_CHECK_EQUAL(lhs, rhs);
 
     lhs = solution({3, 0, 2});
-    rhs = {2, 0, 3};
+    rhs = {0, 6, 0};
     BOOST_CHECK_EQUAL(lhs, rhs);
 }
 
