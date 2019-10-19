@@ -3,6 +3,24 @@
 #include <vector>
 #include <cstdint>
 
+namespace std
+{
+    ostream &operator <<(ostream &os, const vector<uint32_t> &v)
+    {
+        os << " { ";
+        if (v.size() > 1)
+        {
+            copy(v.begin(), v.end() - 1, ostream_iterator<uint32_t>(os, ", "));
+        }
+        if (v.size() >= 1)
+        {
+            os << v.back();
+        }
+        os << " } ";
+        return os;
+    }
+}
+
 std::vector<std::uint32_t> solution(const std::vector<std::uint32_t>&)
 {
     return {};
