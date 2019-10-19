@@ -107,7 +107,47 @@ std::vector<std::uint32_t> solution2(const std::vector<std::uint32_t>& input)
     return res;
 }
 
-auto solution = solution1;
+// time: O(2n)
+// space: O(3n) - can be reducded to o(2n) by reusing one of the tmp vectors (although will make code way less readable).
+std::vector<std::uint32_t> solution3(const std::vector<std::uint32_t>& input)
+{
+    std::uint32_t lhsSum = input.size() > 1 ? 1 : 0;
+    std::uint32_t rhsSum = input.size() > 1 ? 1 : 0;
+
+    // s: o(2n)
+    std::vector<std::uint32_t> lhsV(input.size());
+    std::vector<std::uint32_t> rhsV(input.size());
+
+    // t: o(n)
+    for (std::size_t i = 0; i < input.size(); i++)
+    {
+        lhsSum *= input[i];
+        rhsSum *= input[input.size() - i - 1];
+
+        lhsV[i] = lhsSum;
+        rhsV[input.size() - i - 1] = rhsSum;
+    }
+
+    // s: o(n)
+    std::vector<std::uint32_t> res(input.size());
+    // t: o(n)
+    for (std::size_t i = 0; i < input.size(); i++)
+    {
+        auto lhs = lhsV.size() > 1 ? 1 : 0;
+        if (i > 0)
+            lhs = lhsV[i - 1];
+
+        auto rhs = rhsV.size() > 1 ? 1 : 0;
+        if (i + 1 < rhsV.size())
+            rhs = rhsV[i + 1];
+
+        res[i] = lhs * rhs;
+    }
+
+    return res;
+}
+
+auto solution = solution3;
 
 BOOST_AUTO_TEST_CASE( possitive )
 {
