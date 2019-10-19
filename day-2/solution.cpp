@@ -21,17 +21,21 @@ namespace std
     }
 }
 
+// TODO: check against overflows - each number can be up to uint32_t,
+// yet we hold sums as uint32_t as well - easy to overflow.
+
 // time: O(n^2)
 // space: O(n)
 std::vector<std::uint32_t> solution1(const std::vector<std::uint32_t>& input)
 {
     // O(n)
-    auto res = std::vector<std::uint32_t>(input.size());
+    std::vector<std::uint32_t> res(input.size());
 
     // O(n)
     for (std::size_t i = 0; i < input.size(); i++)
     {
         res[i] = input.size() > 1 ? 1 : 0;
+
         // O(n)
         for (std::size_t j = 0; j < input.size(); j++)
         {
@@ -67,7 +71,10 @@ std::vector<std::uint32_t> solution2(const std::vector<std::uint32_t>& input)
         }
     }
 
-    auto res = std::vector<std::uint32_t>(input.size());
+    // s: O(n)
+    std::vector<std::uint32_t> res(input.size());
+
+    // t: O(n)
     for (std::size_t i = 0; i < input.size(); i++)
     {
         if (input[i] != 0 && !zeroFound)
