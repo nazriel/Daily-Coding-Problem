@@ -54,13 +54,19 @@ std::vector<std::uint32_t> solution(const std::vector<std::uint32_t>& input)
     auto prod = input.size() > 1 ? 1 : 0;
     for (std::size_t i = 0; i < input.size(); i++)
     {
-        prod *= input[i];
+        if (input[i] != 0)
+        {
+            prod *= input[i];
+        }
     }
 
     auto res = std::vector<std::uint32_t>(input.size());
     for (std::size_t i = 0; i < input.size(); i++)
     {
-        res[i] = prod / input[i];
+        if (input[i] != 0)
+        {
+            res[i] = prod / input[i];
+        }
     }
 
     return res;
@@ -76,6 +82,10 @@ BOOST_AUTO_TEST_CASE( possitive )
 
     lhs = solution({3, 2, 1});
     rhs = {2, 3, 6};
+    BOOST_CHECK_EQUAL(lhs, rhs);
+
+    lhs = solution({3, 0, 2});
+    rhs = {2, 0, 3};
     BOOST_CHECK_EQUAL(lhs, rhs);
 }
 
@@ -102,6 +112,10 @@ BOOST_AUTO_TEST_CASE( corner )
     BOOST_CHECK_EQUAL(lhs, rhs);
 
     lhs = solution({3});
+    rhs = {0};
+    BOOST_CHECK_EQUAL(lhs, rhs);
+
+    lhs = solution({0});
     rhs = {0};
     BOOST_CHECK_EQUAL(lhs, rhs);
 }
