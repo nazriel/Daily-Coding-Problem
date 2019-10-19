@@ -21,9 +21,28 @@ namespace std
     }
 }
 
-std::vector<std::uint32_t> solution(const std::vector<std::uint32_t>&)
+// time: O(n^2)
+// space: O(n)
+std::vector<std::uint32_t> solution(const std::vector<std::uint32_t>& input)
 {
-    return {};
+    // O(n)
+    auto res = std::vector<std::uint32_t>(input.size());
+
+    // O(n)
+    for (std::size_t i = 0; i < input.size(); i++)
+    {
+        res[i] = input.size() > 1 ? 1 : 0;
+        // O(n)
+        for (std::size_t j = 0; j < input.size(); j++)
+        {
+            if (j == i)
+            {
+                continue;
+            }
+            res[i] *= input[j];
+        }
+    }
+    return res;
 }
 
 BOOST_AUTO_TEST_CASE( possitive )
