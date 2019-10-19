@@ -23,7 +23,7 @@ namespace std
 
 // time: O(n^2)
 // space: O(n)
-std::vector<std::uint32_t> solution(const std::vector<std::uint32_t>& input)
+std::vector<std::uint32_t> solution1(const std::vector<std::uint32_t>& input)
 {
     // O(n)
     auto res = std::vector<std::uint32_t>(input.size());
@@ -42,6 +42,27 @@ std::vector<std::uint32_t> solution(const std::vector<std::uint32_t>& input)
             res[i] *= input[j];
         }
     }
+    return res;
+}
+
+// time: O(2n)
+// space: O(n)
+// downsides: uses division
+std::vector<std::uint32_t> solution(const std::vector<std::uint32_t>& input)
+{
+    // O(n)
+    auto prod = input.size() > 1 ? 1 : 0;
+    for (std::size_t i = 0; i < input.size(); i++)
+    {
+        prod *= input[i];
+    }
+
+    auto res = std::vector<std::uint32_t>(input.size());
+    for (std::size_t i = 0; i < input.size(); i++)
+    {
+        res[i] = prod / input[i];
+    }
+
     return res;
 }
 
