@@ -2,6 +2,7 @@
 #include <boost/test/included/unit_test.hpp>
 #include <vector>
 #include <cstdint>
+#include <unordered_map>
 
 namespace std
 {
@@ -17,6 +18,18 @@ namespace std
             os << v.back();
         }
         os << " } ";
+        return os;
+    }
+
+    template<typename K, typename V>
+    ostream &operator <<(ostream& os, const unordered_map<K, V>& m)
+    {
+        os << " { ";
+        for (const auto& r : m) {
+            os << "{ \"" << r.first << "\": " << r.second << " }, ";
+        }
+        os << " } ";
+
         return os;
     }
 }
