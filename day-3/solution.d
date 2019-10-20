@@ -1,6 +1,28 @@
 import std.format: format;
 import std.array: replace;
 
+struct Stack
+{
+    void push(Node n)
+    {
+        this.nodes ~= n;
+    }
+
+    Node pop()
+    {
+        auto n = this.nodes[$-1];
+        this.nodes = this.nodes[0..$-1];
+        return n;
+    }
+
+    @property size_t length()
+    {
+        return nodes.length;
+    }
+
+    Node[] nodes;
+}
+
 class Node
 {
     this(string val = "", Node left = null, Node right = null)
@@ -68,7 +90,99 @@ unittest
 
 Node unserialize(string str)
 {
-    return new Node();
+    Stack stack;
+    Node rootNode = null;
+    auto currentNode = rootNode;
+
+    void handleNewNode(ref string s)
+    {
+        stack.push(currentNode);
+        currentNode = new Node();
+        s = s[2..$];
+
+        if (!rootNode)
+        {
+            rootNode = currentNode;
+        }
+    }
+
+    void handleValue(ref string s)
+    {
+        auto len = 0;
+        if (s[2] != '"')
+            throw new Exception(`Couldn't match opening " when parsing value: ` ~ s[2]);
+
+        s = s[3..$];
+        while (true)
+        {
+            if (len >= s.length)
+                throw new Exception(`Couldn't match closing " when parsing value`);
+            if (s[len] == '"' && s[len - 1] != '\\')
+                break;
+            len++;
+        }
+        currentNode.val = s[0 .. len].replace(`\"`, `"`);
+        s = s[len + 1 .. $];
+        if (s[0..$] == ", ")
+            s = s[2..$];
+    }
+
+    void handleLeftNode(ref string s)
+    {
+        s = s[4..$];
+        currentNode.left = new Node();
+        stack.push(currentNode);
+        currentNode = currentNode.left;
+    }
+
+    void handleRightNode(ref string s)
+    {
+        s = s[4..$];
+        currentNode.right = new Node();
+        stack.push(currentNode);
+        currentNode = currentNode.right;
+    }
+
+    auto slice = str[];
+    while (slice.length > 2)
+    {
+        switch (slice[0..2]) {
+        case "n(":
+            handleNewNode(slice);
+            break;
+        case "v=":
+            handleValue(slice);
+            break;
+        case "l=":
+            handleLeftNode(slice);
+            break;
+        case "r=":
+            handleRightNode(slice);
+            break;
+        case ", ":
+            slice = slice[2..$];
+            break;
+        case "),":
+            currentNode = stack.pop();
+            if (!currentNode)
+                throw new Exception("Malformed string");
+
+            slice = slice[3..$];
+            break;
+        case "))":
+            if (stack.length < 2)
+                throw new Exception("Malformed string");
+
+            stack.pop();
+            currentNode = stack.pop();
+            slice = slice[2..$];
+            break;
+        default:
+            throw new Exception("Malformed string");
+        }
+    }
+
+    return rootNode;
 }
 
 // positive cases
