@@ -22,3 +22,10 @@ Node unserialize(string str)
 {
     return new Node();
 }
+
+// Final tests
+unittest
+{
+    auto node = new Node("root", new Node("left", new Node("left.left")), new Node("right"));
+    assert(unserialize(serialize(node)).left.left.val == "left.left");
+}
