@@ -8,12 +8,16 @@ function cons(a, b)
 
 function car(pair)
 {
-    return null;
+    let result = null;
+    pair((a, _) => result = a);
+    return result;
 }
 
 function cdr(pair)
 {
-    return null;
+    let result = null;
+    pair((_, b) => result = b);
+    return result;
 }
 
 let result = null;
