@@ -71,6 +71,48 @@ Node unserialize(string str)
     return new Node();
 }
 
+// positive cases
+unittest
+{
+    auto str = `n(v="root", l=n(v="root.left", l=n(v="root.left.left")), r=n(v="root.right"))`;
+    auto n = unserialize(str);
+    assert(n.val == `root`);
+    assert(n.left.val == `root.left`);
+    assert(n.left.left.val == `root.left.left`);
+    assert(n.right.val == `root.right`);
+
+    str = `n(l=n(l=n(l=n(l=n(l=n(l=n(v="deep")))))))`;
+    n = unserialize(str);
+    assert(n.left.left.left.left.left.left.val == `deep`);
+}
+
+// weird values
+unittest
+{
+    auto str = `n(v="l=n(r=n(v=\"abcd\"))")`;
+    auto n = unserialize(str);
+    assert(n.val == `l=n(r=n(v="abcd"))`, n.val);
+
+    str = `n(v="abcd\\"e")`;
+    n = unserialize(str);
+    assert(n.val == `abcd\"e`, n.val);
+}
+
+// parsing exceptions
+unittest
+{
+    import std.exception: collectException;
+    auto str = `n(v="root l=n(v="root.left", l=n(v="root.left.left")), r=n(v="root.right"))`;
+    auto exception = collectException(unserialize(str));
+    assert(exception);
+    assert(exception.msg == "Malformed string", exception.msg);
+
+    str = `n(v="root )`;
+    exception = collectException(unserialize(str));
+    assert(exception);
+    assert(exception.msg == `Couldn't match closing " when parsing value`, exception.msg);
+}
+
 // Final tests
 unittest
 {
