@@ -1,3 +1,6 @@
+import std.format: format;
+import std.array: replace;
+
 class Node
 {
     this(string val = "", Node left = null, Node right = null)
@@ -5,6 +8,11 @@ class Node
         this.val = val;
         this.left = left;
         this.right = right;
+    }
+
+    override string toString()
+    {
+        return serialize(this);
     }
 
 private:
@@ -15,7 +23,28 @@ private:
 
 string serialize(Node node)
 {
-    return "";
+    string r = "";
+    r ~= `n(v="%s"`.format(node.val.replace(`"`, `\"`));
+
+    if (node.left || node.right)
+    {
+        r ~= ", ";
+    }
+
+    if (node.left)
+    {
+        r ~= "l=" ~ serialize(node.left);
+    }
+
+    if (node.right)
+    {
+        if (node.left)
+            r ~= ", ";
+
+        r ~= "r=" ~ serialize(node.right);
+    }
+    r ~= ")";
+    return r;
 }
 
 unittest
