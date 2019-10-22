@@ -20,6 +20,19 @@ typedef struct XorLinkedList
     size_t len;
 } XorLinkedList;
 
+XorLinkedList* newXorLinkedList()
+{
+    XorLinkedList* n = (XorLinkedList*) malloc(sizeof(XorLinkedList));
+    if (!n)
+    {
+        assert(false);
+    }
+
+    memset(n, 0, sizeof(XorLinkedList));
+
+    return n;
+}
+
 Node* newNode(void* value, size_t size)
 {
     Node* n = (Node*) malloc(sizeof(Node));
@@ -80,5 +93,14 @@ void printAll(XorLinkedList* list)
 
 int main()
 {
+    XorLinkedList* list = newXorLinkedList();
+    add(list, ((void*) "abcd"), 5);
+    add(list, ((void*) "dcba"), 5);
+    add(list, ((void*) "xvyz"), 5);
+
+
+    // TODO: make it unittest able.
+    printAll(list);
+    assert(get(list, 123) == ((void*) 0xdeadbeef));
     return 0;
 }
