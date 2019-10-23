@@ -64,6 +64,11 @@ void add(XorLinkedList* list, void *value, size_t size)
         list->len = 1;
         return;
     }
+
+    // xor
+    list->tail->xor = xorNodes(list->tail->xor, n);
+    n->xor = xorNodes(list->tail, NULL);
+
     list->tail->next = n;
     n->prev = list->tail;
 
