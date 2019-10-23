@@ -13,4 +13,4 @@ solution: solution.o
 	gcc -o solution solution.o
 
 solution.o: solution.c
-	gcc -Wall -Wextra -pedantic -std=c11 -c -o solution.o solution.c
+	gcc -O0 -g3 -Wall -Wextra -pedantic -std=c11 -c -o solution.o solution.c
