@@ -9,8 +9,6 @@ typedef struct Node
 {
     void* value;
     size_t size;
-    struct Node* next;
-    struct Node* prev;
     struct Node* xor;
 } Node;
 
@@ -69,9 +67,6 @@ void add(XorLinkedList* list, void *value, size_t size)
     list->tail->xor = xorNodes(list->tail->xor, n);
     n->xor = xorNodes(list->tail, NULL);
 
-    list->tail->next = n;
-    n->prev = list->tail;
-
     list->tail = n;
     list->len++;
 }
@@ -107,7 +102,7 @@ void printAll(XorLinkedList* list)
 
     while (curr)
     {
-        printf("%p (next: %p, prev: %p, xor: %p): %.*s\n", (void*) curr, (void*) curr->next, (void*) curr->prev,
+        printf("%p (xor: %p): %.*s\n", (void*) curr,
             (void*) curr->xor, (int) curr->size, (char*) curr->value);
         next = xorNodes(prev, curr->xor);
         prev = curr;
@@ -120,7 +115,7 @@ void printAll(XorLinkedList* list)
 
     while (curr)
     {
-        printf("%p (next: %p, prev: %p, xor: %p): %.*s\n", (void*) curr, (void*) curr->next, (void*) curr->prev,
+        printf("%p (xor: %p): %.*s\n", (void*) curr,
             (void*) curr->xor, (int) curr->size, (char*) curr->value);
         next = xorNodes(prev, curr->xor);
         prev = curr;
