@@ -81,10 +81,16 @@ void* get(XorLinkedList* list, size_t nth)
     if (nth > list->len)
         return NULL;
 
+    Node* prev = NULL;
+    Node* next = NULL;
     Node* curr = list->head;
+
     size_t i = 0u;
-    for (i = 0; i < nth && curr; i++, curr = curr->next)
+    for (i = 0; i < nth && curr; i++)
     {
+        next = xorNodes(curr->xor, prev);
+        prev = curr;
+        curr = next;
     }
 
     if (i != nth || !curr)
@@ -96,22 +102,29 @@ void* get(XorLinkedList* list, size_t nth)
 void printAll(XorLinkedList* list)
 {
     Node* curr = list->head;
-    Node* prev = NULL;
+    Node *next = NULL;
+    Node *prev = NULL;
 
     while (curr)
     {
         printf("%p (next: %p, prev: %p, xor: %p): %.*s\n", (void*) curr, (void*) curr->next, (void*) curr->prev,
             (void*) curr->xor, (int) curr->size, (char*) curr->value);
+        next = xorNodes(prev, curr->xor);
         prev = curr;
-        curr = curr->next;
+        curr = next;
     }
 
     curr = prev;
+    prev = NULL;
+    next = NULL;
+
     while (curr)
     {
         printf("%p (next: %p, prev: %p, xor: %p): %.*s\n", (void*) curr, (void*) curr->next, (void*) curr->prev,
             (void*) curr->xor, (int) curr->size, (char*) curr->value);
-        curr = curr->prev;
+        next = xorNodes(prev, curr->xor);
+        prev = curr;
+        curr = next;
     }
 }
 
