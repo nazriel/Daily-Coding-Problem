@@ -108,9 +108,15 @@ int main()
     add(list, ((void*) "dcba"), 5);
     add(list, ((void*) "xvyz"), 5);
 
+    const char* v = get(list, 2);
+    assert(v != NULL && strcmp(v, "xvyz") == 0);
 
-    // TODO: make it unittest able.
+    v = get(list, 1);
+    assert(v != NULL && strcmp(v, "dcba") == 0);
+
+    v = get(list, 0);
+    assert(v != NULL && strcmp(v, "abcd") == 0);
+
     printAll(list);
-    assert(get(list, 123) == ((void*) 0xdeadbeef));
     return 0;
 }
