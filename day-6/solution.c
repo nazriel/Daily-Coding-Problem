@@ -94,6 +94,7 @@ void* get(XorLinkedList* list, size_t nth)
     return curr->value;
 }
 
+#if 0
 void printAll(XorLinkedList* list)
 {
     Node* curr = list->head;
@@ -122,6 +123,7 @@ void printAll(XorLinkedList* list)
         curr = next;
     }
 }
+#endif
 
 int main()
 {
@@ -139,6 +141,5 @@ int main()
     v = get(list, 0);
     assert(v != NULL && strcmp(v, "abcd") == 0);
 
-    printAll(list);
     return 0;
 }
