@@ -51,7 +51,7 @@ void add(XorLinkedList* list, void *value, size_t size)
 {
     Node* n = newNode(value, size);
     if (list->head == NULL)
-{
+    {
         list->head = n;
         list->tail = n;
         list->len = 1;
@@ -64,11 +64,21 @@ void add(XorLinkedList* list, void *value, size_t size)
     list->len++;
 }
 
-void* get(XorLinkedList* list, size_t index)
+void* get(XorLinkedList* list, size_t nth)
 {
-    (void) index;
-    (void) list;
-    return (void *)0xdeadbeef;
+    if (nth > list->len)
+        return NULL;
+
+    Node* curr = list->head;
+    size_t i = 0u;
+    for (i = 0; i < nth && curr; i++, curr = curr->next)
+    {
+    }
+
+    if (i != nth || !curr)
+        return NULL;
+
+    return curr->value;
 }
 
 void printAll(XorLinkedList* list)
