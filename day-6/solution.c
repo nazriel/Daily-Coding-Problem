@@ -48,6 +48,12 @@ Node* newNode(void* value, size_t size)
 
     return n;
 }
+
+Node* xorNodes(Node* left, Node* right)
+{
+    return (Node *)(((uintptr_t)left) ^ ((uintptr_t)right));
+}
+
 void add(XorLinkedList* list, void *value, size_t size)
 {
     Node* n = newNode(value, size);
